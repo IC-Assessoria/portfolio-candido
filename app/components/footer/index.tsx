@@ -96,10 +96,12 @@ export default function Footer() {
 
         <div className="h-px w-full bg-white/[0.05]" />
 
-        <div className="flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
-          <p>© {currentYear} IC Assessoria – Antônio Cândido. Todos os direitos reservados.</p>
-          <p className="text-slate-400">
-            Vigilância e Análise de Dados em Saúde
+        <div className="flex flex-col items-center justify-center text-center text-xs text-slate-400 space-y-3 pt-2">
+          <p>© 2026 IC Assessoria – Vigilância e Análise de Dados em Saúde.</p>
+          <p>Todos os direitos reservados.</p>
+          <p className="text-slate-300">
+            Desenvolvido por{' '}
+            <span className="text-orange-400 font-medium">Ednario Andrade</span>.
           </p>
         </div>
       </div>
