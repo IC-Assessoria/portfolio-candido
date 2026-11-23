@@ -4,6 +4,7 @@ import { FiShield, FiTrendingUp, FiTarget, FiUserCheck, FiLayers } from 'react-i
 import SectionTitle from '@/app/components/section-title'
 import Reveal from '@/app/components/reveal'
 import Logo from '@/app/components/brand/logo'
+import TiltCard3D from '@/app/components/3d/tilt-card'
 import { IC_ASSESSORIA_INFO } from '@/app/data/ic-assessoria'
 
 export interface AboutSectionProps {
@@ -70,10 +71,10 @@ export default function AboutSection({ initialData }: AboutSectionProps = {}) {
             </div>
           </Reveal>
 
-          {/* Three Operational Pillars */}
+          {/* Three Operational Pillars with 3D elevation */}
           <Reveal delay={0.15}>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/30 transition-all">
+              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/40 hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(249,115,22,0.2)] transition-all duration-300">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-2.5">
                   <FiShield size={16} />
                 </div>
@@ -83,7 +84,7 @@ export default function AboutSection({ initialData }: AboutSectionProps = {}) {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/30 transition-all">
+              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/40 hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(249,115,22,0.2)] transition-all duration-300">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-2.5">
                   <FiTrendingUp size={16} />
                 </div>
@@ -93,7 +94,7 @@ export default function AboutSection({ initialData }: AboutSectionProps = {}) {
                 </p>
               </div>
 
-              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/30 transition-all">
+              <div className="p-4 rounded-2xl bg-slate-900/50 border border-white/[0.08] hover:border-orange-500/40 hover:-translate-y-1 hover:shadow-[0_12px_24px_-8px_rgba(249,115,22,0.2)] transition-all duration-300">
                 <div className="w-8 h-8 rounded-lg bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400 mb-2.5">
                   <FiTarget size={16} />
                 </div>
@@ -108,82 +109,103 @@ export default function AboutSection({ initialData }: AboutSectionProps = {}) {
           {/* Institutional Image Banner if provided */}
           {institutionalImageUrl && (
             <Reveal delay={0.18}>
-              <div className="mt-2 rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative aspect-[21/9] sm:aspect-[2.4/1] bg-slate-950/80">
+              <div className="mt-2 rounded-2xl overflow-hidden border border-white/10 shadow-2xl relative aspect-[21/9] sm:aspect-[2.4/1] bg-slate-950/80 group">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img
                   src={institutionalImageUrl}
                   alt="Imagem Institucional IC Assessoria"
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                 />
               </div>
             </Reveal>
           )}
         </div>
 
-        {/* Right Column: Professional Profile Card of Antônio Cândido */}
+        {/* Right Column: 3D Professional Profile Card of Antônio Cândido */}
         <div className="lg:col-span-5 flex flex-col gap-6">
           <Reveal delay={0.2}>
-            <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/[0.08] via-slate-900/90 to-[#07080c] border border-white/10 backdrop-blur-xl shadow-photo overflow-hidden">
-              {/* Subtle top-right decorative graphic */}
-              <div
-                aria-hidden="true"
-                className="absolute -top-12 -right-12 w-36 h-36 bg-orange-500/15 rounded-full blur-2xl pointer-events-none"
-              />
+            <TiltCard3D
+              maxTilt={8}
+              scale={1.01}
+              perspective={1000}
+              enableGlare={true}
+              glareMaxOpacity={0.18}
+            >
+              <div className="relative p-6 sm:p-8 rounded-3xl bg-gradient-to-b from-white/[0.08] via-slate-900/90 to-[#07080c] border border-white/10 backdrop-blur-xl shadow-photo overflow-hidden">
+                {/* Subtle top-right decorative graphic */}
+                <div
+                  aria-hidden="true"
+                  className="absolute -top-12 -right-12 w-36 h-36 bg-orange-500/15 rounded-full blur-2xl pointer-events-none"
+                />
 
-              <div className="flex items-center gap-3.5 mb-6">
-                {responsiblePhotoUrl ? (
-                  <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-orange-500/40 shadow-[0_0_20px_rgba(249,115,22,0.25)] shrink-0 bg-slate-900">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={responsiblePhotoUrl}
-                      alt={responsibleName}
-                      className="w-full h-full object-cover"
-                    />
-                  </div>
-                ) : (
-                  <Logo size="md" layout="mark-only" />
-                )}
-                <div>
-                  <span className="text-[11px] font-mono uppercase tracking-wider text-orange-400 bg-orange-950/40 border border-orange-500/30 px-2.5 py-0.5 rounded-full">
-                    Responsabilidade Técnica
-                  </span>
-                  <h3 className="text-xl font-bold text-white mt-1">
-                    {responsibleName}
-                  </h3>
-                  {responsibleRole && (
-                    <p className="text-xs text-slate-400 mt-0.5">{responsibleRole}</p>
+                {/* Profile Header - floats at Z:28px */}
+                <div
+                  className="flex items-center gap-3.5 mb-6"
+                  style={{ transform: 'translateZ(28px)' }}
+                >
+                  {responsiblePhotoUrl ? (
+                    <div className="relative w-16 h-16 rounded-2xl overflow-hidden border-2 border-orange-500/40 shadow-[0_0_20px_rgba(249,115,22,0.25)] shrink-0 bg-slate-900">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={responsiblePhotoUrl}
+                        alt={responsibleName}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ) : (
+                    <Logo size="md" layout="mark-only" />
                   )}
+                  <div>
+                    <span className="text-[11px] font-mono uppercase tracking-wider text-orange-400 bg-orange-950/40 border border-orange-500/30 px-2.5 py-0.5 rounded-full">
+                      Responsabilidade Técnica
+                    </span>
+                    <h3 className="text-xl font-bold text-white mt-1">
+                      {responsibleName}
+                    </h3>
+                    {responsibleRole && (
+                      <p className="text-xs text-slate-400 mt-0.5">{responsibleRole}</p>
+                    )}
+                  </div>
                 </div>
-              </div>
 
-              <div className="space-y-3 text-slate-300 text-sm leading-relaxed mb-6">
-                <p>
-                  À frente da <strong className="text-white">IC Assessoria</strong>, {responsibleName} atua diretamente no apoio técnico a instituições, gestores e equipes na área da saúde.
-                </p>
-                <p className="text-slate-400">{responsibleBio}</p>
-              </div>
+                <div
+                  className="space-y-3 text-slate-300 text-sm leading-relaxed mb-6"
+                  style={{ transform: 'translateZ(16px)' }}
+                >
+                  <p>
+                    À frente da <strong className="text-white">IC Assessoria</strong>, {responsibleName} atua diretamente no apoio técnico a instituições, gestores e equipes na área da saúde.
+                  </p>
+                  <p className="text-slate-400">{responsibleBio}</p>
+                </div>
 
-              {/* Competency Badges */}
-              <div className="pt-4 border-t border-white/[0.08] space-y-2.5">
-                <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                  <FiUserCheck className="text-orange-400 shrink-0" size={15} />
-                  <span>Apoio consultivo personalizado a equipes de saúde</span>
+                {/* Competency Badges - floats at Z:20px */}
+                <div
+                  className="pt-4 border-t border-white/[0.08] space-y-2.5"
+                  style={{ transform: 'translateZ(20px)' }}
+                >
+                  <div className="flex items-center gap-2.5 text-xs text-slate-300">
+                    <FiUserCheck className="text-orange-400 shrink-0" size={15} />
+                    <span>Apoio consultivo personalizado a equipes de saúde</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-xs text-slate-300">
+                    <FiLayers className="text-orange-400 shrink-0" size={15} />
+                    <span>Organização e integração de sistemas e prontuários</span>
+                  </div>
+                  <div className="flex items-center gap-2.5 text-xs text-slate-300">
+                    <FiTarget className="text-orange-400 shrink-0" size={15} />
+                    <span>Orientação técnica com foco em impacto e resolutividade</span>
+                  </div>
                 </div>
-                <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                  <FiLayers className="text-orange-400 shrink-0" size={15} />
-                  <span>Organização e integração de sistemas e prontuários</span>
-                </div>
-                <div className="flex items-center gap-2.5 text-xs text-slate-300">
-                  <FiTarget className="text-orange-400 shrink-0" size={15} />
-                  <span>Orientação técnica com foco em impacto e resolutividade</span>
-                </div>
-              </div>
 
-              {/* Bottom Quote Pill */}
-              <div className="mt-6 p-4 rounded-2xl bg-orange-950/30 border border-orange-500/20 text-xs text-orange-200/90 italic leading-relaxed">
-                &ldquo;Transformar números em inteligência aplicada à saúde para que cada decisão proteja e fortaleça vidas.&rdquo;
+                {/* Bottom Quote Pill - floats at Z:24px */}
+                <div
+                  className="mt-6 p-4 rounded-2xl bg-orange-950/30 border border-orange-500/20 text-xs text-orange-200/90 italic leading-relaxed shadow-lg shadow-orange-950/20"
+                  style={{ transform: 'translateZ(24px)' }}
+                >
+                  &ldquo;Transformar números em inteligência aplicada à saúde para que cada decisão proteja e fortaleça vidas.&rdquo;
+                </div>
               </div>
-            </div>
+            </TiltCard3D>
           </Reveal>
         </div>
       </div>

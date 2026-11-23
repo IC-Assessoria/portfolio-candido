@@ -1,6 +1,7 @@
 'use client'
 
 import { useEffect, useRef } from 'react'
+import Particles3D from '../3d/particles-3d'
 
 export default function BackgroundEffects() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -29,6 +30,9 @@ export default function BackgroundEffects() {
         } as React.CSSProperties
       }
     >
+      {/* 3D Particle Starfield with Depth Parallax */}
+      <Particles3D />
+
       {/* Dynamic Cursor Spotlight - discreet, elegant and smooth */}
       <div
         className="hidden md:block absolute inset-0 transition-opacity duration-500 opacity-60"
