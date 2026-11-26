@@ -173,9 +173,9 @@ export default function HealthDataGlobe3D({
         const ringSegments = 48
         for (let j = 0; j <= ringSegments; j++) {
           const a = (j / ringSegments) * Math.PI * 2
-          let rx = ring.radius * Math.cos(a)
-          let ry = ring.radius * Math.sin(a)
-          let rz = 0
+          const rx = ring.radius * Math.cos(a)
+          const ry = ring.radius * Math.sin(a)
+          const rz = 0
 
           // Tilt ring
           const t1y = ry * Math.cos(ring.tiltX) - rz * Math.sin(ring.tiltX)
@@ -202,9 +202,9 @@ export default function HealthDataGlobe3D({
 
         // Draw moving data packet on ring
         const pa = ring.packetAngle
-        let px = ring.radius * Math.cos(pa)
-        let py = ring.radius * Math.sin(pa)
-        let pz = 0
+        const px = ring.radius * Math.cos(pa)
+        const py = ring.radius * Math.sin(pa)
+        const pz = 0
 
         const pt1y = py * Math.cos(ring.tiltX) - pz * Math.sin(ring.tiltX)
         const pt1z = py * Math.sin(ring.tiltX) + pz * Math.cos(ring.tiltX)

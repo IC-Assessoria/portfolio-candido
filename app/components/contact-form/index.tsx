@@ -6,6 +6,7 @@ import {
   FiMail,
   FiMessageSquare,
   FiLinkedin,
+  FiInstagram,
   FiSend,
   FiClock,
   FiCheckCircle,
@@ -31,8 +32,48 @@ type ContactFormData = z.infer<typeof contactFormSchema>
 const fieldClassName =
   'w-full bg-slate-900/70 border border-white/10 rounded-xl placeholder:text-slate-500 text-slate-100 p-4 text-sm focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500/40 backdrop-blur-md transition-all'
 
-export default function ContactForm() {
-  const { contact } = IC_ASSESSORIA_INFO
+interface ContactFormProps {
+  contactSettings?: {
+    title?: string
+    subtitle?: string
+    description?: string
+    whatsapp?: string
+    email?: string
+    linkedin?: string
+    instagram?: string
+    address?: string | null
+  } | null
+}
+
+export default function ContactForm({ contactSettings }: ContactFormProps) {
+  const { contact: defaultContact } = IC_ASSESSORIA_INFO
+
+  const title = contactSettings?.title || defaultContact.title
+  const subtitle = contactSettings?.subtitle || defaultContact.subtitle
+  const description = contactSettings?.description || defaultContact.description
+
+  const rawPhone = contactSettings?.whatsapp ? contactSettings.whatsapp.replace(/\D/g, '') : ''
+  const whatsappHref = rawPhone
+    ? rawPhone.startsWith('55')
+      ? `https://wa.me/${rawPhone}`
+      : `https://wa.me/55${rawPhone}`
+    : defaultContact.channels[0].href
+  const whatsappLabel = contactSettings?.whatsapp || defaultContact.channels[0].note
+
+  const emailHref = contactSettings?.email ? `mailto:${contactSettings.email}` : defaultContact.channels[1].href
+  const emailLabel = contactSettings?.email || defaultContact.channels[1].note
+
+  const linkedinHref = contactSettings?.linkedin
+    ? contactSettings.linkedin.startsWith('http')
+      ? contactSettings.linkedin
+      : `https://${contactSettings.linkedin}`
+    : defaultContact.channels[2].href
+
+  const instagramHref = contactSettings?.instagram
+    ? contactSettings.instagram.startsWith('http')
+      ? contactSettings.instagram
+      : `https://instagram.com/${contactSettings.instagram.replace(/^@/, '')}`
+    : null
 
   const {
     handleSubmit,
@@ -70,11 +111,11 @@ export default function ContactForm() {
           <div className="lg:col-span-5 flex flex-col gap-6">
             <Reveal>
               <SectionTitle
-                subtitle={contact.subtitle}
-                title={contact.title}
+                subtitle={subtitle}
+                title={title}
               />
               <p className="text-slate-300 text-sm sm:text-base mt-4 leading-relaxed">
-                {contact.description}
+                {description}
               </p>
             </Reveal>
 
@@ -83,7 +124,7 @@ export default function ContactForm() {
               <div className="flex flex-col gap-3.5 mt-2">
                 {/* WhatsApp Channel */}
                 <a
-                  href={contact.channels[0].href}
+                  href={whatsappHref}
                   target="_blank"
                   rel="noreferrer"
                   className="group p-4 rounded-2xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/40 hover:bg-slate-900/90 transition-all flex items-center justify-between"
@@ -94,10 +135,10 @@ export default function ContactForm() {
                     </div>
                     <div>
                       <h4 className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">
-                        {contact.channels[0].label}
+                        WhatsApp Direto
                       </h4>
                       <p className="text-xs text-slate-400">
-                        {contact.channels[0].note}
+                        {whatsappLabel}
                       </p>
                     </div>
                   </div>
@@ -106,7 +147,7 @@ export default function ContactForm() {
 
                 {/* Email Channel */}
                 <a
-                  href={contact.channels[1].href}
+                  href={emailHref}
                   className="group p-4 rounded-2xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/40 hover:bg-slate-900/90 transition-all flex items-center justify-between"
                 >
                   <div className="flex items-center gap-3.5">
@@ -115,10 +156,10 @@ export default function ContactForm() {
                     </div>
                     <div>
                       <h4 className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">
-                        {contact.channels[1].label}
+                        E-mail Institucional
                       </h4>
                       <p className="text-xs text-slate-400">
-                        {contact.channels[1].note}
+                        {emailLabel}
                       </p>
                     </div>
                   </div>
@@ -127,7 +168,7 @@ export default function ContactForm() {
 
                 {/* LinkedIn Channel */}
                 <a
-                  href={contact.channels[2].href}
+                  href={linkedinHref}
                   target="_blank"
                   rel="noreferrer"
                   className="group p-4 rounded-2xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/40 hover:bg-slate-900/90 transition-all flex items-center justify-between"
@@ -138,15 +179,40 @@ export default function ContactForm() {
                     </div>
                     <div>
                       <h4 className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">
-                        {contact.channels[2].label}
+                        LinkedIn
                       </h4>
                       <p className="text-xs text-slate-400">
-                        {contact.channels[2].note}
+                        Conecte-se profissionalmente
                       </p>
                     </div>
                   </div>
                   <HiArrowNarrowRight className="text-slate-500 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" size={18} />
                 </a>
+
+                {/* Instagram Channel (if configured) */}
+                {instagramHref && (
+                  <a
+                    href={instagramHref}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="group p-4 rounded-2xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/40 hover:bg-slate-900/90 transition-all flex items-center justify-between"
+                  >
+                    <div className="flex items-center gap-3.5">
+                      <div className="w-10 h-10 rounded-xl bg-pink-500/15 border border-pink-500/30 flex items-center justify-center text-pink-400 group-hover:scale-105 transition-all">
+                        <FiInstagram size={18} />
+                      </div>
+                      <div>
+                        <h4 className="text-sm font-semibold text-white group-hover:text-orange-300 transition-colors">
+                          Instagram
+                        </h4>
+                        <p className="text-xs text-slate-400">
+                          Acompanhe publicações e novidades
+                        </p>
+                      </div>
+                    </div>
+                    <HiArrowNarrowRight className="text-slate-500 group-hover:text-orange-400 group-hover:translate-x-1 transition-all" size={18} />
+                  </a>
+                )}
               </div>
             </Reveal>
 

@@ -17,8 +17,11 @@ export async function GET(req: NextRequest) {
       projectsCount,
       projectsPublishedCount,
       mediaCount,
+      messagesCount,
+      unreadMessagesCount,
       recentServices,
       recentArticles,
+      recentMessages,
     ] = await Promise.all([
       prisma.service.count(),
       prisma.service.count({ where: { published: true } }),
@@ -27,6 +30,8 @@ export async function GET(req: NextRequest) {
       prisma.portfolioProject.count(),
       prisma.portfolioProject.count({ where: { published: true } }),
       prisma.media.count(),
+      prisma.contactMessage.count(),
+      prisma.contactMessage.count({ where: { read: false } }),
       prisma.service.findMany({
         take: 3,
         orderBy: { updatedAt: 'desc' },
@@ -36,6 +41,10 @@ export async function GET(req: NextRequest) {
         take: 3,
         orderBy: { updatedAt: 'desc' },
         select: { id: true, title: true, updatedAt: true, published: true },
+      }),
+      prisma.contactMessage.findMany({
+        take: 5,
+        orderBy: { createdAt: 'desc' },
       }),
     ])
 
@@ -48,7 +57,10 @@ export async function GET(req: NextRequest) {
         projects: projectsCount,
         projectsPublished: projectsPublishedCount,
         media: mediaCount,
+        messages: messagesCount,
+        unreadMessages: unreadMessagesCount,
       },
+      recentMessages,
       recentActivity: [
         ...recentServices.map((s) => ({
           id: s.id,

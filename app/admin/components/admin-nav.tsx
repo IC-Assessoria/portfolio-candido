@@ -12,6 +12,7 @@ import {
   FiFileText,
   FiBriefcase,
   FiImage,
+  FiMail,
   FiPhone,
   FiSettings,
   FiLogOut,
@@ -38,6 +39,7 @@ const NAV_ITEMS = [
   { href: '/admin/articles', label: 'Conteúdos & Artigos', icon: FiFileText },
   { href: '/admin/portfolio', label: 'Portfólio & Experiências', icon: FiBriefcase },
   { href: '/admin/media', label: 'Biblioteca de Mídia', icon: FiImage },
+  { href: '/admin/messages', label: 'Mensagens Recebidas', icon: FiMail },
   { href: '/admin/contact', label: 'Informações de Contato', icon: FiPhone },
   { href: '/admin/settings', label: 'Configurações Gerais', icon: FiSettings },
 ]

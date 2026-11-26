@@ -11,6 +11,7 @@ import {
   FiHome,
   FiInfo,
   FiPhone,
+  FiMail,
   FiSettings,
   FiArrowRight,
   FiCheckCircle,
@@ -28,7 +29,18 @@ interface DashboardData {
     projects: number
     projectsPublished: number
     media: number
+    messages?: number
+    unreadMessages?: number
   }
+  recentMessages?: Array<{
+    id: string
+    name: string
+    email: string
+    subject: string | null
+    message: string
+    read: boolean
+    createdAt: string
+  }>
   recentActivity: Array<{
     id: string
     type: string
@@ -99,7 +111,35 @@ export default function AdminDashboardPage() {
         </div>
 
         {/* KPI Cards Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6">
+          {/* Mensagens / Leads */}
+          <div className="p-6 rounded-3xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/30 transition-all relative overflow-hidden">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-xs font-mono text-slate-400 uppercase">Contatos</span>
+              <div className="w-10 h-10 rounded-2xl bg-orange-500/15 border border-orange-500/30 flex items-center justify-center text-orange-400">
+                <FiMail size={18} />
+              </div>
+            </div>
+            <div className="text-3xl font-bold text-white font-mono flex items-center gap-2">
+              <span>{loading ? '-' : data?.counts.messages ?? 0}</span>
+              {(data?.counts.unreadMessages ?? 0) > 0 && (
+                <span className="text-[10px] font-bold font-sans px-2 py-0.5 rounded-full bg-orange-500 text-white animate-pulse">
+                  {data?.counts.unreadMessages} novos
+                </span>
+              )}
+            </div>
+            <p className="text-xs text-slate-400 mt-1">
+              {loading ? 'Carregando...' : `${data?.counts.unreadMessages ?? 0} não lidos`}
+            </p>
+            <Link
+              href="/admin/messages"
+              className="mt-4 inline-flex items-center gap-1.5 text-xs text-orange-400 hover:text-orange-300 font-medium"
+            >
+              <span>Ver mensagens</span>
+              <FiArrowRight size={12} />
+            </Link>
+          </div>
+
           {/* Serviços */}
           <div className="p-6 rounded-3xl bg-slate-900/60 border border-white/[0.08] hover:border-orange-500/30 transition-all">
             <div className="flex items-center justify-between mb-3">
@@ -249,6 +289,78 @@ export default function AdminDashboardPage() {
               </p>
             </Link>
           </div>
+        </div>
+
+        {/* Recent Contact Inquiries */}
+        <div className="p-6 rounded-3xl bg-slate-900/50 border border-white/[0.08]">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-base font-bold text-white flex items-center gap-2">
+              <FiMail size={18} className="text-orange-400" />
+              <span>Contatos e Solicitações Recentes</span>
+            </h2>
+            <Link
+              href="/admin/messages"
+              className="text-xs text-orange-400 hover:text-orange-300 font-medium inline-flex items-center gap-1"
+            >
+              <span>Ver todas</span>
+              <FiArrowRight size={12} />
+            </Link>
+          </div>
+
+          {loading ? (
+            <div className="py-8 text-center text-xs text-slate-400">
+              Carregando mensagens...
+            </div>
+          ) : !data?.recentMessages || data.recentMessages.length === 0 ? (
+            <div className="py-8 text-center text-xs text-slate-400">
+              Nenhuma mensagem de contato recebida até o momento.
+            </div>
+          ) : (
+            <div className="divide-y divide-white/[0.06]">
+              {data.recentMessages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className="py-3 flex flex-col sm:flex-row sm:items-center justify-between gap-2"
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <span
+                      className={`w-2 h-2 rounded-full shrink-0 ${
+                        msg.read ? 'bg-slate-600' : 'bg-orange-500 animate-pulse'
+                      }`}
+                    />
+                    <span className="text-sm font-semibold text-white truncate">
+                      {msg.name}
+                    </span>
+                    <span className="text-xs text-slate-400 truncate">
+                      ({msg.email})
+                    </span>
+                    {msg.subject && (
+                      <span className="hidden md:inline-block text-xs font-mono text-orange-400/90 truncate">
+                        • {msg.subject}
+                      </span>
+                    )}
+                  </div>
+
+                  <div className="flex items-center gap-3 text-xs text-slate-400 shrink-0">
+                    <span className="font-mono text-[11px]">
+                      {new Date(msg.createdAt).toLocaleDateString('pt-BR', {
+                        day: '2-digit',
+                        month: 'short',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      })}
+                    </span>
+                    <Link
+                      href="/admin/messages"
+                      className="text-orange-400 hover:text-orange-300 font-medium"
+                    >
+                      Abrir
+                    </Link>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Recent Updates & Activity */}
